@@ -7,6 +7,17 @@ A machine-learning project combining anomaly detection, cardholder profiling, ex
 
 ---
 
+## 🎬 Project Demo
+
+Watch the Fraud Guard project demonstration:
+
+<div align="center">
+
+[![Fraud Guard Demo](https://img.youtube.com/vi/_WJSLMlAaA8/maxresdefault.jpg)](https://www.youtube.com/watch?v=_WJSLMlAaA8)
+
+**▶ Click the thumbnail to watch the full demonstration on YouTube.**
+
+</div>
 ## 👀 Project Overview
 
 Fraud Guard analyses transaction patterns to identify potentially suspicious activity. It combines multiple anomaly detectors with individual cardholder behaviour to produce a final risk score.
