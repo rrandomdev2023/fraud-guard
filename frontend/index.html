@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fraud Console – Adaptive Hybrid Ensemble</title>
+<style>
+:root{--bg:#f6f7f4;--card:#fff;--ink:#16211d;--mute:#5d6b64;--line:#dfe4de;--accent:#0f6b54;--warn:#b3321f;--bar:#cfd8d2}
+@media (prefers-color-scheme:dark){:root{--bg:#101614;--card:#18211e;--ink:#e8efe9;--mute:#97a69d;--line:#2a3733;--accent:#4fc3a1;--warn:#ff8a73;--bar:#2e3d38}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.5rem;margin:.2rem 0}h2{font-size:1.1rem;margin:0 0 10px}
+p.sub{color:var(--mute);margin:0 0 18px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0}
+button{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:9px 14px;font:inherit;cursor:pointer}
+button.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:disabled{opacity:.5}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{color:var(--mute);font-weight:600}
+.bar{display:inline-block;height:8px;background:var(--accent);border-radius:4px;vertical-align:middle;margin-left:6px}
+.best td{font-weight:600}
+.fraud{color:var(--warn);font-weight:600}
+.msg{color:var(--mute);margin:8px 0 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+label{display:block;color:var(--mute);font-size:.85rem}
+input,select{width:100%;padding:7px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+.shap{display:grid;grid-template-columns:150px 1fr 60px;gap:8px;align-items:center;margin:4px 0}
+.track{position:relative;height:10px;background:var(--bar);border-radius:5px}
+.fill{position:absolute;top:0;bottom:0;border-radius:5px}
+.pos{background:var(--warn)}.neg{background:var(--accent)}
+.explain{margin-top:12px;padding:12px;border:1px dashed var(--line);border-radius:8px}
+</style>
+</head>
+<body>
+<main>
+<h1>Fraud console</h1>
+<p class="sub">Ensemble anomaly detection, per-cardholder profiling and SHAP explanations.</p>
+
+<section>
+  <h2>1. Load data and train</h2>
+  <div class="row">
+    <button id="trainBtn">Train on synthetic data</button>
+    <input type="file" id="csv" accept=".csv" style="max-width:260px">
+    <button class="ghost" id="uploadBtn">Train on my CSV</button>
+  </div>
+  <p class="msg" id="trainMsg">CSV columns: card_id, timestamp, amount, merchant_category, distance_km, is_fraud.</p>
+</section>
+
+<section>
+  <h2>2. Compare against standalone detectors</h2>
+  <p class="msg" id="summary">Train a model to see results.</p>
+  <div class="scroll"><table id="metrics"></table></div>
+</section>
+
+<section>
+  <h2>3. Flagged transactions</h2>
+  <div class="scroll"><table id="flagged"></table></div>
+  <div id="explainBox"></div>
+</section>
+
+<section>
+  <h2>4. Score a new transaction</h2>
+  <div class="grid">
+    <div><label>Card ID<input id="f_card" value="C0001"></label></div>
+    <div><label>Amount<input id="f_amount" type="number" value="950"></label></div>
+    <div><label>Hour (0-23)<input id="f_hour" type="number" min="0" max="23" value="3"></label></div>
+    <div><label>Category<select id="f_cat"></select></label></div>
+    <div><label>Distance from home (km)<input id="f_dist" type="number" value="400"></label></div>
+    <div><label>Txns in last 1h<input id="f_t1" type="number" value="1"></label></div>
+    <div><label>Txns in last 24h<input id="f_t24" type="number" value="2"></label></div>
+  </div>
+  <p><button id="scoreBtn">Score transaction</button></p>
+  <div id="scoreOut"></div>
+</section>
+
+<section>
+  <h2>5. Concept drift: static model vs sliding-window retraining</h2>
+  <p><button class="ghost" id="driftBtn">Run drift experiment</button></p>
+  <div class="scroll"><table id="drift"></table></div>
+</section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const api = async (path, opts) => {
+  const r = await fetch("/api" + path, opts);
+  if (!r.ok) throw new Error((await r.json()).detail || r.statusText);
+  return r.json();
+};
+const busy = async (btn, msgEl, text, fn) => {
+  btn.disabled = true; if (msgEl) msgEl.textContent = text;
+  try { await fn(); } catch (e) { if (msgEl) msgEl.textContent = "Error: " + e.message; }
+  btn.disabled = false;
+};
+
+async function afterTrain() {
+  const r = await api("/results");
+  const s = r.summary;
+  $("summary").textContent = `${s.transactions.toLocaleString()} transactions, ${s.cards} cards, ${s.frauds} frauds. ` +
+    `Test set: ${s.test_rows.toLocaleString()} rows with ${s.test_frauds} frauds. Tuned weights: α=${r.alpha}, β=${r.beta}.`;
+  const best = Math.max(...r.metrics.map(m => m.auprc));
+  $("metrics").innerHTML = "<tr><th>Model</th><th>AUPRC</th><th>AUC-ROC</th><th>Precision</th><th>Recall</th><th>F1</th></tr>" +
+    r.metrics.map(m => `<tr class="${m.auprc === best ? "best" : ""}"><td>${m.model}</td>
+      <td>${m.auprc}<span class="bar" style="width:${m.auprc * 90}px"></span></td>
+      <td>${m.auc_roc}</td><td>${m.precision}</td><td>${m.recall}</td><td>${m.f1}</td></tr>`).join("");
+  const f = await api("/flagged?limit=25");
+  $("flagged").innerHTML = "<tr><th>Card</th><th>Time</th><th>Amount</th><th>Category</th><th>Km</th><th>Ensemble</th><th>Profile</th><th>Final</th><th>Actual</th><th></th></tr>" +
+    f.map(t => `<tr><td>${t.card_id}</td><td>${t.timestamp.slice(0, 16)}</td><td>${t.amount}</td><td>${t.merchant_category}</td>
+      <td>${t.distance_km}</td><td>${t.ensemble}</td><td>${t.personal}</td><td>${t.final}</td>
+      <td class="${t.is_fraud ? "fraud" : ""}">${t.is_fraud ? "fraud" : "normal"}</td>
+      <td><button class="ghost" onclick="explain(${t.id})">Why?</button></td></tr>`).join("");
+  $("explainBox").innerHTML = "";
+}
+
+function shapHtml(e) {
+  const mx = Math.max(...e.contributions.map(c => Math.abs(c.shap)), 1e-6);
+  const p = e.card_profile;
+  return `<div class="explain"><b>Risk score ${e.score}</b> (average transaction ${e.base_value})
+    <p class="msg">This card usually spends about ${p.typical_amount} around ${p.typical_hour}:00, mostly on ${p.top_categories.join(", ")}, within ~${p.typical_distance_km} km of home.</p>
+    ${e.contributions.map(c => `<div class="shap"><span>${c.feature} = ${c.value}</span>
+      <div class="track"><div class="fill ${c.shap > 0 ? "pos" : "neg"}" style="left:${c.shap > 0 ? 50 : 50 - 50 * Math.abs(c.shap) / mx}%;width:${50 * Math.abs(c.shap) / mx}%"></div></div>
+      <span>${c.shap > 0 ? "+" : ""}${c.shap}</span></div>`).join("")}
+    <p class="msg">${e.reasons.length ? "Top reasons: " + e.reasons.join("; ") + "." : "No single factor raised the risk noticeably."}</p></div>`;
+}
+async function explain(id) {
+  $("explainBox").innerHTML = '<p class="msg">Computing SHAP values…</p>';
+  try { $("explainBox").innerHTML = shapHtml(await api("/explain/" + id)); }
+  catch (e) { $("explainBox").innerHTML = '<p class="msg">Error: ' + e.message + "</p>"; }
+}
+
+$("trainBtn").onclick = () => busy($("trainBtn"), $("trainMsg"), "Training the ensemble… this takes about a minute.", async () => {
+  const r = await api("/train", { method: "POST" });
+  $("trainMsg").textContent = `Trained on ${r.transactions.toLocaleString()} transactions.`; await afterTrain();
+});
+$("uploadBtn").onclick = () => busy($("uploadBtn"), $("trainMsg"), "Uploading and training…", async () => {
+  const file = $("csv").files[0]; if (!file) throw new Error("Choose a CSV file first.");
+  const fd = new FormData(); fd.append("file", file);
+  const r = await api("/upload", { method: "POST", body: fd });
+  $("trainMsg").textContent = `Trained on ${r.transactions.toLocaleString()} transactions.`; await afterTrain();
+});
+$("scoreBtn").onclick = () => busy($("scoreBtn"), null, "", async () => {
+  const body = { card_id: $("f_card").value, amount: +$("f_amount").value, hour: +$("f_hour").value,
+    merchant_category: $("f_cat").value, distance_km: +$("f_dist").value, txn_1h: +$("f_t1").value, txn_24h: +$("f_t24").value };
+  try {
+    const r = await api("/score", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    $("scoreOut").innerHTML = `<p><b class="${r.flagged ? "fraud" : ""}">${r.flagged ? "Flagged as suspicious" : "Looks normal"}</b>
+      – score ${r.final_score} (threshold ${r.threshold})</p>` + shapHtml(r.explanation);
+  } catch (e) { $("scoreOut").innerHTML = '<p class="msg">Error: ' + e.message + "</p>"; }
+});
+$("driftBtn").onclick = () => busy($("driftBtn"), null, "", async () => {
+  try {
+    const d = await api("/drift");
+    $("drift").innerHTML = "<tr><th>Window</th><th>Frauds</th><th>Static AUPRC</th><th>Sliding AUPRC</th></tr>" +
+      d.map(w => `<tr><td>${w.window}</td><td>${w.frauds}</td><td>${w.static_auprc}</td><td>${w.sliding_auprc}</td></tr>`).join("");
+  } catch (e) { $("drift").innerHTML = "<tr><td>Error: " + e.message + "</td></tr>"; }
+});
+api("/categories").then(c => $("f_cat").innerHTML = c.map(x => `<option>${x}</option>`).join(""));
+api("/health").then(h => { if (h.trained) afterTrain(); });
+</script>
+</body>
+</html>
