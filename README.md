@@ -1,19 +1,21 @@
-<!-- Animated Fraud Guard banner -->
-<p align="center">
-  <img src="docs/assets/fraud-guard-banner.gif" alt="Fraud Guard animated banner" width="100%">
-</p>
 
-<!-- Add the screenshot section wherever it fits in your README -->
-## Application Screenshots
+<div align="center">
 
-### Dashboard and model comparison
-![Fraud Guard dashboard](docs/screenshots/dashboard-overview.png)
+# 🛡️ FRAUD GUARD
 
-### Flagged transactions
-![Flagged transactions](docs/screenshots/flagged-transactions.png)
+### Adaptive Hybrid Ensemble Anomaly Detection
 
-### Transaction risk scoring and explanation
-![Transaction risk explanation](docs/screenshots/transaction-risk-explanation.png)
+**Intelligent transaction monitoring · Explainable AI · Fraud Risk Scoring**
 
-### Concept drift experiment
-![Concept drift results](docs/screenshots/concept-drift-results.png)
+<img src="docs/assets/fraud-guard-banner.gif"
+     alt="Fraud Guard animated banner"
+     width="85%">
+
+![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi)
+![Machine Learning](https://img.shields.io/badge/Machine%20Learning-Ensemble-orange)
+![Status](https://img.shields.io/badge/Project-Academic-purple)
+
+</div>
+
+---
