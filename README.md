@@ -265,11 +265,36 @@ CSV input requires the following columns:
 
 ## 👥 Team
 
-Fraud Guard is an academic MCA project developed collaboratively.
+## 👥 Project Team
 
-The project brings together machine learning, backend development, data analysis and web technologies.
+Fraud Guard was developed as a collaborative MCA academic project, bringing together concepts from machine learning, artificial intelligence, data analytics and web development.
 
-Contributions, suggestions and improvements are welcome through GitHub Issues and Pull Requests.
+### Team Members
+
+| Sl. No. | Name |
+|---|---|
+| 1 | Dipika Goswami |
+| 2 | Bhagirath Shaw |
+| 3 | Komal Singh |
+| 4 | Aman Prasad |
+| 5 | Aniket Kumar Singh |
+
+### Project Details
+
+- **Project Title:** Fraud Guard
+- **Project Domain:** Machine Learning and Cybersecurity
+- **Programme:** Master of Computer Applications (MCA)
+- **Institution:** Adamas University
+
+### Areas of Contribution
+
+The project involved collaborative work in:
+
+- Machine Learning and anomaly detection
+- Backend development and API integration
+- Frontend design and dashboard development
+- Data preprocessing and model evaluation
+- Testing, documentation and project presentation
 
 ---
 
