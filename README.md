@@ -8,7 +8,7 @@
 **Intelligent Transaction Monitoring · Explainable AI · Fraud Risk Scoring**
 
 <p align="center">
-  <img src="docs/assets/fraud-guard-banner.gif"
+  <img src="docs/assets/Fraud Guard_ Neon Credit Security.png"
        alt="Fraud Guard"
        width="100%">
 </p>
