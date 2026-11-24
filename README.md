@@ -263,8 +263,6 @@ CSV input requires the following columns:
 
 ---
 
-## 👥 Team
-
 ## 👥 Project Team
 
 Fraud Guard was developed as a collaborative MCA academic project, bringing together concepts from machine learning, artificial intelligence, data analytics and web development.
