@@ -1,84 +1,152 @@
-# 🛡️ Fraud Guard
-### Adaptive Hybrid Ensemble Anomaly Detection for Credit Card Fraud
-
-A machine-learning project combining anomaly detection, cardholder profiling, explainable risk scoring and concept-drift experiments.
-
-**Technologies:** Python · FastAPI · Scikit-learn · NumPy · Pandas · SHAP
-
----
-
-## 🎬 Project Demo
-
-Watch the Fraud Guard project demonstration:
 
 <div align="center">
 
-[![Fraud Guard Demo](https://img.youtube.com/vi/_WJSLMlAaA8/maxresdefault.jpg)](https://www.youtube.com/watch?v=_WJSLMlAaA8)
+# 🛡️ FRAUD GUARD
 
-**▶ Click the thumbnail to watch the full demonstration on YouTube.**
+### Adaptive Hybrid Ensemble Anomaly Detection for Credit Card Fraud
+
+**Intelligent Transaction Monitoring · Explainable AI · Fraud Risk Scoring**
+
+<img src="docs/assets/fraud-guard-banner.gif"
+     alt="Fraud Guard Animated Banner"
+     width="85%">
+
+<br>
+
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white)
+![Machine Learning](https://img.shields.io/badge/Machine_Learning-Ensemble-orange)
+![Project](https://img.shields.io/badge/Project-Academic-purple)
 
 </div>
+
+---
+
 ## 👀 Project Overview
 
-Fraud Guard analyses transaction patterns to identify potentially suspicious activity. It combines multiple anomaly detectors with individual cardholder behaviour to produce a final risk score.
+Fraud Guard is a machine-learning-based credit card fraud detection system that analyses transaction patterns to identify potentially suspicious activity.
 
-![Fraud Guard Dashboard](docs/screenshots/dashboard-overview.png)
+It combines multiple anomaly detection algorithms with individual cardholder behaviour profiling to generate transaction risk scores and provide explainable predictions.
+
+### 🎬 Live Project Demonstration
+
+Explore Fraud Guard in action. Watch the demonstration to see the dashboard, transaction analysis, fraud detection workflow and model results.
+
+<div align="center">
+
+<a href="https://www.youtube.com/watch?v=_WJSLMlAaA8">
+  <img src="https://img.youtube.com/vi/_WJSLMlAaA8/maxresdefault.jpg"
+       alt="Watch Fraud Guard Project Demonstration"
+       width="85%">
+</a>
+
+**▶️ [Watch the Full Project Demonstration on YouTube](https://www.youtube.com/watch?v=_WJSLMlAaA8)**
+
+</div>
+
+---
 
 ## ✨ Key Features
 
-- **Hybrid Ensemble Detection:** Isolation Forest, Autoencoder and Local Outlier Factor.
-- **Cardholder Profiling:** Learns individual spending behaviour.
-- **Transaction Risk Scoring:** Combines ensemble and personal-profile scores.
-- **Explainable Predictions:** Displays feature contributions behind suspicious transactions.
-- **Model Evaluation:** Compares AUPRC, AUC-ROC, precision, recall and F1.
-- **Concept Drift:** Compares static models with sliding-window retraining.
-- **CSV Upload:** Supports custom transaction datasets.
+| Feature | Description |
+|---|---|
+| 🧠 Hybrid Ensemble Detection | Combines Isolation Forest, Autoencoder and Local Outlier Factor. |
+| 👤 Cardholder Profiling | Learns individual spending behaviour. |
+| 📊 Transaction Risk Scoring | Combines ensemble and personal-profile scores. |
+| 🔍 Explainable Predictions | Displays feature contributions behind suspicious transactions. |
+| 📈 Model Evaluation | Compares AUPRC, AUC-ROC, precision, recall and F1. |
+| 🔄 Concept Drift | Compares static models with sliding-window retraining. |
+| 📁 CSV Upload | Supports custom transaction datasets. |
+
+---
 
 ## 🖥️ Application Screenshots
 
-### 1. Model Training and Comparison
-![Model comparison](docs/screenshots/dashboard-overview.png)
+### 1. Dashboard and Model Comparison
+
+View model training status, dataset statistics and performance comparisons.
+
+<p align="center">
+  <img src="docs/screenshots/dashboard-overview.png"
+       alt="Fraud Guard Dashboard"
+       width="95%">
+</p>
 
 ### 2. Flagged Transactions
-![Flagged transactions](docs/screenshots/flagged-transactions.png)
+
+Review potentially suspicious transactions and their corresponding risk scores.
+
+<p align="center">
+  <img src="docs/screenshots/flagged-transactions.png"
+       alt="Flagged Transactions"
+       width="95%">
+</p>
 
 ### 3. Transaction Risk Explanation
-![Risk explanation](docs/screenshots/transaction-risk-explanation.png)
+
+Analyse transaction risk scores and the factors contributing to suspicious predictions.
+
+<p align="center">
+  <img src="docs/screenshots/transaction-risk-explanation.png"
+       alt="Transaction Risk Explanation"
+       width="95%">
+</p>
 
 ### 4. Concept Drift Experiment
-![Concept drift](docs/screenshots/concept-drift-results.png)
+
+Compare static model performance with sliding-window retraining.
+
+<p align="center">
+  <img src="docs/screenshots/concept-drift-results.png"
+       alt="Concept Drift Experiment Results"
+       width="95%">
+</p>
+
+---
 
 ## 🧠 Detection Workflow
 
+Fraud Guard follows a two-stage detection approach.
+
 ```text
-Transaction Data
-       |
-       v
-Data Preparation
-       |
-       v
-Stage 1: Ensemble Detection
-  |        |          |
-Isolation  Autoencoder  LOF
-  |        |          |
-       v
-Stage 2: Cardholder Profile
-       |
-       v
-Combined Risk Score
-       |
-       v
-Suspicious Transaction?
-       |
-       v
-SHAP Explanation
+                 TRANSACTION DATA
+                         |
+                         v
+               DATA PREPARATION
+                         |
+                         v
+            STAGE 1: ENSEMBLE DETECTION
+                         |
+             +-----------+-----------+
+             |           |           |
+             v           v           v
+         Isolation   Autoencoder    LOF
+          Forest
+             |           |           |
+             +-----------+-----------+
+                         |
+                         v
+            STAGE 2: CARDHOLDER PROFILE
+                         |
+                         v
+                COMBINED RISK SCORE
+                         |
+                         v
+              SUSPICIOUS TRANSACTION?
+                         |
+                         v
+                  SHAP EXPLANATION
 ```
 
-Final score:
+### Risk Score Calculation
 
-`Final = α × Ensemble + β × Personal`
+The final score combines the ensemble signal and the personal-profile signal:
+
+`Final Score = α × Ensemble Score + β × Personal Score`
 
 The weights are tuned using validation data.
+
+---
 
 ## 📊 Model Performance
 
@@ -94,49 +162,67 @@ Results from the experiment displayed in the application:
 
 *These are experiment-specific results, not guaranteed real-world performance.*
 
-## ⚙️ Installation
+---
+
+## ⚙️ Installation and Setup
 
 ### Requirements
+
 - Python 3.10+
 - pip
+- Git
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/rrandomdev2023/fraud-guard.git
 cd fraud-guard
 ```
 
-### 2. Create a virtual environment
+### 2. Create a Virtual Environment
+
+**Windows PowerShell**
 
 ```powershell
 cd backend
 python -m venv venv
-venv\Scripts\activate
+venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+**Linux / macOS**
+
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Run the application
+### 4. Run the Application
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-Open:
+### 5. Open the Application
 
-- Dashboard: http://127.0.0.1:8000
-- API documentation: http://127.0.0.1:8000/docs
+| Service | URL |
+|---|---|
+| Fraud Guard Dashboard | http://127.0.0.1:8000 |
+| Interactive API Documentation | http://127.0.0.1:8000/docs |
 
-Select **Train on synthetic data** to start the training workflow.
+Select **Train on synthetic data** to start the built-in training workflow.
+
+---
 
 ## 📁 Dataset Format
 
-CSV input requires:
+CSV input requires the following columns:
 
 | Column | Description |
 |---|---|
@@ -147,30 +233,61 @@ CSV input requires:
 | `distance_km` | Distance from home |
 | `is_fraud` | Fraud label |
 
+---
+
 ## 🔬 Implementation Notes
 
-- Autoencoder uses Scikit-learn `MLPRegressor` with an 8-3-8 bottleneck.
+- The Autoencoder uses Scikit-learn `MLPRegressor` with an 8-3-8 bottleneck.
 - Detector fitting uses normal, earlier transactions.
 - Evaluation uses the latest 25% of the timeline.
 - Threshold selection is performed on validation data.
 - Concept drift experiments compare static and sliding-window approaches.
 
+---
+
 ## 🧰 Technology Stack
 
-Python · FastAPI · Scikit-learn · NumPy · Pandas · SHAP · HTML · CSS · JavaScript
+<div align="center">
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Scikit-learn](https://img.shields.io/badge/Scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
+![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+
+</div>
+
+**Additional tools:** SHAP · HTML · CSS
+
+---
 
 ## 👥 Team
 
-An academic MCA project developed collaboratively. Contributions and improvements are welcome through GitHub issues and pull requests.
+Fraud Guard is an academic MCA project developed collaboratively.
+
+The project brings together machine learning, backend development, data analysis and web technologies.
+
+Contributions, suggestions and improvements are welcome through GitHub Issues and Pull Requests.
+
+---
 
 ## ⚠️ Disclaimer
 
-Fraud Guard is an academic demonstration and research project. Its predictions are experimental and should not be used as the sole basis for real financial decisions.
+Fraud Guard is an academic demonstration and research project.
+
+Its predictions and risk scores are experimental and should not be used as the sole basis for real financial decisions. Real-world deployment requires additional validation, testing and security controls.
 
 ---
 
 <div align="center">
 
-**⭐ If you find this project interesting, consider starring the repository!**
+### ⭐ Support the Project
+
+If you find Fraud Guard interesting, consider giving this repository a star!
+
+**Built with ❤️ for learning, experimentation and safer digital transactions.**
+
+[GitHub Repository](https://github.com/rrandomdev2023/fraud-guard) · [Project Demo](https://www.youtube.com/watch?v=_WJSLMlAaA8) · [Report an Issue](https://github.com/rrandomdev2023/fraud-guard/issues)
 
 </div>
