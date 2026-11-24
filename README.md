@@ -8,9 +8,9 @@
 **Intelligent Transaction Monitoring · Explainable AI · Fraud Risk Scoring**
 
 <p align="center">
-  <img src="docs/assets/fraud-guard-banner.png"
+  <img src="docs/assets/fraud-guard-banner.gif"
        alt="Fraud Guard"
-       width="650">
+       width="100%">
 </p>
 <br>
 
