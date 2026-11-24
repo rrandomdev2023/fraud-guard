@@ -5,16 +5,18 @@
 
 ### Adaptive Hybrid Ensemble Anomaly Detection
 
-**Intelligent transaction monitoring · Explainable AI · Fraud Risk Scoring**
+Intelligent Transaction Monitoring · Explainable AI · Fraud Risk Scoring
 
 <img src="docs/assets/fraud-guard-banner.gif"
-     alt="Fraud Guard animated banner"
-     width="85%">
+     alt="Fraud Guard Animated Banner"
+     width="70%">
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)
+<br>
+
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi)
-![Machine Learning](https://img.shields.io/badge/Machine%20Learning-Ensemble-orange)
-![Status](https://img.shields.io/badge/Project-Academic-purple)
+![Machine Learning](https://img.shields.io/badge/Machine_Learning-Ensemble-orange)
+![Project](https://img.shields.io/badge/Project-Academic-purple)
 
 </div>
 
