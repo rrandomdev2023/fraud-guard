@@ -9,8 +9,7 @@
 
 <img src="docs/assets/fraud-guard-banner.gif"
      alt="Fraud Guard Animated Banner"
-     width="85%">
-
+     width="55%">
 <br>
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
