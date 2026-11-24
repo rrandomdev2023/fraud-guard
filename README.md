@@ -7,9 +7,11 @@
 
 **Intelligent Transaction Monitoring · Explainable AI · Fraud Risk Scoring**
 
-<img src="docs/assets/fraud-guard-banner.gif"
-     alt="Fraud Guard Animated Banner"
-     width="55%">
+<p align="center">
+  <img src="docs/assets/fraud-guard-banner.gif"
+       alt="Fraud Guard"
+       width="400">
+</p>
 <br>
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
