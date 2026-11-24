@@ -10,7 +10,7 @@
 <p align="center">
   <img src="docs/assets/Fraud Guard Animated Glow Banner.gif"
        alt="Fraud Guard"
-       width="100%">
+       width="75%">
 </p>
 <br>
 
